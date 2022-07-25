@@ -1,0 +1,36 @@
+* {
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Ubuntu', sans-serif;
+    color: azure;
+    
+}
+
+body {
+    text-align: center;
+    background-color: darkslategrey;
+    color: azure;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+input {
+    font-size: 1rem;
+    color: darkslategrey;
+    background-color: azure;
+}
+
+input[type=text] {
+    width: 50%;
+}
+
+.note {
+    font-size: 1rem;
+    color: darkslategrey;
+    background-color: azure;
+    width: 50%;
+    text-align: left;
+}

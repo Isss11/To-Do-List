@@ -12,17 +12,7 @@
         <link rel="stylesheet" href="styles.css">
 
         <!--Scripts-->
-        <script>
-            window.addEventListener('load', init, false); //calls initializer function after page has loaded
-
-            function init (e) {
-                document.getElementById('addNoteButton').addEventListener('click', addNote, false);
-            }
-
-            function addNote(e) {
-                document.toDoList.insertAdjacentHTML("beforeend", "<h2>" + document.getElementById('addNoteText').value + "</h2>"); //this adds in the element into the list
-            }
-        </script>
+        <script src="scripts.js"></script>
     </head>
     
     <body>
@@ -31,6 +21,8 @@
         <form name="toDoList">
             <input id="addNoteText" type="text">
             <input id="addNoteButton" type="button" value="Add">
+            <ul id="noteList">
+            </ul>
         </form>
     </body>
 
