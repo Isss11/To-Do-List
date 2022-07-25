@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>To-Do List</title>
+
+        <!--Linking Fonts-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet"> 
+        <link rel="stylesheet" href="styles.css">
+
+        <!--Scripts-->
+        <script>
+            window.addEventListener('load', init, false); //calls initializer function after page has loaded
+
+            function init (e) {
+                document.getElementById('addNoteButton').addEventListener('click', addNote, false);
+            }
+
+            function addNote(e) {
+                document.toDoList.insertAdjacentHTML("beforeend", "<h2>" + document.getElementById('addNoteText').value + "</h2>"); //this adds in the element into the list
+            }
+        </script>
+    </head>
+    
+    <body>
+        <h1>Isaiah's To-Do List</h1>
+        <!--To do list portion-->
+        <form name="toDoList">
+            <input id="addNoteText" type="text">
+            <input id="addNoteButton" type="button" value="Add">
+        </form>
+    </body>
+
+</html>
