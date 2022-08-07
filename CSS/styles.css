@@ -8,7 +8,6 @@
 }
 
 body {
-    text-align: center;
     background-color: darkslategrey;
     color: azure;
 }
@@ -18,19 +17,5 @@ h1 {
 }
 
 input {
-    font-size: 1rem;
     color: darkslategrey;
-    background-color: azure;
-}
-
-input[type=text] {
-    width: 50%;
-}
-
-.note {
-    font-size: 1rem;
-    color: darkslategrey;
-    background-color: azure;
-    width: 50%;
-    text-align: left;
 }

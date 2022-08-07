@@ -1,35 +1,55 @@
-
 document.addEventListener('DOMContentLoaded', init, false);
 
- function init (e) {
-    document.getElementById('addNoteButton').addEventListener('click', addNote, false); //references the button for clicks
-    deleteButtonListener();
+function init (e) {
+    document.querySelector('#addNoteButton').addEventListener('click', addNote, false); //references the button for clicks
    }
 
-function deleteButtonListener(e) { //we can only add event listeners to a collection via a loop
-   deleteButtonNodes = document.getElementsByClassName('deleteButton');
+function addNote(e) {
+   let fullNote = document.createElement('div');
+   let deleteButton = document.createElement('button');e
+   let completeButton = document.createElement('button');
+   let noteText = document.createElement('li');
 
-   for (var i = 0; i < deleteButtonNodes.length; ++i) {
-      deleteButtonNodes[i].addEventListener('click', removeNote, false); //going through each node and giving it an event listener
-   }
+   deleteButton.type = "button";
+   completeButton.type = "button"; //have to change the default value from 'submit' to a button
+
+   deleteButton.innerText = "Delete";
+   completeButton.innerText = "Finished";
+   noteText.innerText = document.querySelector('#addNoteText').value;
+
+   fullNote.appendChild(deleteButton);
+   fullNote.appendChild(completeButton);
+   fullNote.appendChild(noteText); //the div is the parent of these 3 elements in the note
+
+   document.querySelector('#noteList').appendChild(fullNote); //adding the new div with its contents to the list
+
+   fullNote.classList.add('toDo');
+   completeButton.classList.add('completeButton');
+   deleteButton.classList.add('deleteButton');
+   noteText.classList.add('noteText');
+
+   deleteButton.addEventListener('click', removeNote, false);
+   completeButton.addEventListener('click', markNote, false);
+
+   completeButton.value = false; // button is not yet clicked (false)
 }
 
- function addNote(e) { //the css document makes this margin auto -- to take up additinoal space on left and right equally.
-    document.getElementById('noteList').insertAdjacentHTML("beforeend", 
-    "<div class='fullNote'><li class='note'>" + document.getElementById('addNoteText').value + "</li> <input class='deleteButton' type='button' value='Delete'></div>"); //this adds in the element into the list
+//removes clicked parent element from the DOM
+function removeNote (e) {
+   e.target.parentNode.remove();
+}
 
-   deleteButtonListener(); //updating event listeners.
- } 
+//marks or unmarks clicked parent element
+function markNote (e) {
 
- function removeNote(e) { //index getting portion is from https://stackoverflow.com/questions/5913927/get-child-node-index
-   fullNotesCollection = document.getElementsByClassName('fullNote');
+   if (e.target.value == "false") { // I compared this with a string, since it appears to implicity convert the boolean to a string
+      e.target.parentNode.style.textDecoration = 'line-through';
 
-   fullNotesCollection[0].remove(); //FIXME
- }
- /*Plan for Function removeNote:
- 
- None of these notes have a specific ID attached to them, so we will need to get the index of the child of the ul element.
- Thus we will use that index to then delete a specific element.
- We will need an event listener for all of the buttons, based on class -- then we will call a function that will get the index
- to delete the element.
- */
+      e.target.value = true;
+
+   } else {
+      e.target.parentNode.style.textDecoration = 'none';
+
+      e.target.value = false;
+   }
+}
