@@ -11,6 +11,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet"> 
         <link rel="stylesheet" href="../CSS/styles.css">
 
+        <!--Font Library for icons-->
+        <link href="../Fonts/css/all.min.css" rel="stylesheet">
+
         <!--Scripts-->
         <script src="../JS/scripts.js"></script>
     </head>
@@ -18,12 +21,15 @@
     <body>
         <h1>Isaiah's To-Do List</h1>
         <!--To do list portion-->
-        <form name="toDoList">
-            <input id="addNoteText" type="text">
-            <input id="addNoteButton" type="button" value="Add">
-            <ul id="noteList">
-            </ul>
+
+
+        <form name="toDoList" class="toDo">
+            <input id="addNoteText" type="text" >
+            <button type="button" id="addNoteButton" ><i class="fa-solid fa-plus"></i></button> <!--The type=button makes the form not submit-->
         </form>
+
+        <ul id="noteList">
+        </ul>
     </body>
 
 </html>
