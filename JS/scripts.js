@@ -45,20 +45,38 @@ function addNote(e) {
 
 //removes clicked parent element from the DOM
 function removeNote (e) {
-   e.target.parentNode.remove();
+   if (e.target.tagName == 'I') { //if we click on the icon
+      e.target.parentNode.parentNode.remove();
+   } else {
+      e.target.parentNode.remove();
+   }
 }
 
 //marks or unmarks clicked parent element
 function markNote (e) {
-
-   if (e.target.value == "false") { // I compared this with a string, since it appears to implicity convert the boolean to a string
-      e.target.parentNode.firstChild.style.textDecoration = 'line-through';
-
-      e.target.value = true;
-
+   if (e.target.tagName == 'I') { //if we click on the icon
+      if (e.target.parentNode.value == "false") { // I compared this with a string, since it appears to implicity convert the boolean to a string
+         e.target.parentNode.parentNode.firstChild.style.textDecoration = 'line-through';
+   
+         e.target.parentNode.value = true;
+   
+      } else {
+         e.target.parentNode.parentNode.firstChild.style.textDecoration = 'none';
+   
+         e.target.parentNode.value = false;
+      }
    } else {
-      e.target.parentNode.firstChild.style.textDecoration = 'none';
-
-      e.target.value = false;
+      if (e.target.value == "false") { // I compared this with a string, since it appears to implicity convert the boolean to a string
+         e.target.parentNode.firstChild.style.textDecoration = 'line-through';
+   
+         e.target.value = true;
+   
+      } else {
+         e.target.parentNode.firstChild.style.textDecoration = 'none';
+   
+         e.target.value = false;
+      }
    }
+
+
 }

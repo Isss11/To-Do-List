@@ -25,10 +25,15 @@ input, button, li {
 
 input {
     width: 20em;
+    border-radius: 5%;
 }
 
 li {
     min-width: 30em;
+}
+
+li, input {
+    color: black;
 }
 
 .toDo {
