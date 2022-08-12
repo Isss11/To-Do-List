@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: darkslategrey;
+    background-color: rgb(231, 135, 93);
     color: azure;
 }
 
@@ -34,6 +34,8 @@ li {
 
 li, input {
     color: black;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
 }
 
 .toDo {
@@ -65,4 +67,8 @@ button {
     margin-left: 0.5em;
     padding: 0.1em;
     border-radius: 10%;
+}
+
+#editToDo {
+    display: none;
 }
