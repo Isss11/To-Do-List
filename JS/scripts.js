@@ -68,14 +68,14 @@ function markNote (e) {
       if (e.target.parentNode.value == "false") { // I compared this with a string, since it appears to implicity convert the boolean to a string
          e.target.parentNode.parentNode.firstChild.style.textDecoration = 'line-through';
    
-         e.target.parentNode.parentNode.firstChild.style.opacity = 0.5;
+         e.target.parentNode.parentNode.firstChild.style.opacity = 0.5; //decreasing opacity when marked off
 
          e.target.parentNode.value = true;
    
       } else {
          e.target.parentNode.parentNode.firstChild.style.textDecoration = 'none';
 
-         e.target.parentNode.parentNode.firstChild.style.opacity = 1.0;
+         e.target.parentNode.parentNode.firstChild.style.opacity = 1.0; //resetting opacity
    
          e.target.parentNode.value = false;
       }
@@ -100,13 +100,15 @@ function markNote (e) {
 
 //this allows you to edit the note by showing the edit form and minimizing the other form (only for initiating edit)
 function editNote (e) {
-   let textField;
+   let textField, fullNote;
 
    if (e.target.tagName == 'I') { //fixing for the issue with icon referencing
       textField = e.target.parentNode.parentNode.firstChild;
+      fullNote = e.target.parentNode.parentNode;
 
    } else {
       textField = e.target.parentNode.firstChild;
+      fullNote = e.target.parentNode;
    }
 
    document.querySelector('#toDoList').style.display = 'none';
@@ -114,18 +116,48 @@ function editNote (e) {
 
    document.querySelector('#editNoteText').value = textField.textContent; //getting text element value
 
-   document.querySelector('#doneEditButton').addEventListener('click', submitEdit, 'false');
-   document.querySelector('#cancelEditButton').addEventListener('click', cancelEdit, 'false');
+   //disabling relevant fields
+   fullNote.style.opacity = 0.5;
+   for (let i = 0; i < fullNote.childNodes.length; ++i) {
+      if (fullNote.childNodes[i].tagName == 'BUTTON') { //tagName returns the value in UPPERCASE
+         fullNote.childNodes[i].disabled = true;
+      }
+   }
+   
+   document.querySelector('#doneEditButton').addEventListener('click', submitEdit(textField, fullNote), 'false');
+   document.querySelector('#cancelEditButton').addEventListener('click', returnEdit(fullNote), 'false');
+   
+
 }
 
 //this function cancels the edit imposed, by removing the edit form and going back to the original page
-function cancelEdit(e) {
-   document.querySelector('#toDoList').style.display = 'flex';
-   document.querySelector('#editToDo').style.display = 'none';
+function returnEdit(noteElement) { 
+   return function curriedResetNote(e) { //seems like this is being called when event exists
+      resetNote(noteElement);
+   }
+   
 }
 
 
 //this function changes the value of the li element to reflect what is in the editToDo form
-function submitEdit(e) {
-   //Function stub
+https://stackoverflow.com/questions/256754/how-to-pass-arguments-to-addeventlistener-listener-function?noredirect=1&lq=1
+function submitEdit(textField, noteElement) {
+   return function changeNote(e) { //curried function to be able to pass parameter (see link above)
+      textField.textContent = document.querySelector('#editNoteText').value;
+
+      resetNote(noteElement); //returning back to regular screen
+   }
+}
+
+function resetNote(noteElement) {
+   document.querySelector('#toDoList').style.display = 'flex';
+   document.querySelector('#editToDo').style.display = 'none';
+
+   noteElement.style.opacity = 1.0;
+
+   for (let i = 0; i < noteElement.childNodes.length; ++i) {
+      if (noteElement.childNodes[i].tagName == 'BUTTON') { //tagName returns the value in UPPERCASE
+         noteElement.childNodes[i].disabled = false;
+      }
+   }
 }
