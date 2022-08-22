@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', init, false);
+document.addEventListener('DOMContentLoaded', loadFromStorage, 'false');
 
 function init (e) {
     document.querySelector('#addNoteButton').addEventListener('click', checkNote, false); //references the button for clicks
-   }
+}
 
 //Checks if we can actually create a note (if note is actually available) 
 function checkNote(e) {
@@ -18,22 +19,18 @@ function addNote(e) {
    let noteText = document.createElement('li');
    let deleteButton = document.createElement('button');
    let completeButton = document.createElement('button');
-   let editButton = document.createElement('button');
 
    deleteButton.type = "button";
    completeButton.type = "button"; //have to change the default value from 'submit' to a button
-   editButton.type = "button";
 
    deleteButton.innerHTML = "<i class='fa-solid fa-square-minus'></i>";
    completeButton.innerHTML = "<i class='fa-solid fa-check'></i>";
-   editButton.innerHTML = "<i class='fa-solid fa-pen-to-square'></i>";
    
    noteText.innerText = document.querySelector('#addNoteText').value;
 
    fullNote.appendChild(noteText); //the div is the parent of these 3 elements in the note
    fullNote.appendChild(deleteButton);
    fullNote.appendChild(completeButton);
-   fullNote.appendChild(editButton);
 
    document.querySelector('#noteList').appendChild(fullNote); //adding the new div with its contents to the list
 
@@ -41,13 +38,14 @@ function addNote(e) {
    noteText.classList.add('noteText');
    completeButton.classList.add('completeButton');
    deleteButton.classList.add('deleteButton');
-   editButton.classList.add('editButton');
 
    deleteButton.addEventListener('click', removeNote, false);
    completeButton.addEventListener('click', markNote, false);
-   editButton.addEventListener('click', editNote, false);
 
    completeButton.value = false; // button is not yet clicked (false)
+
+   //Add to local storage
+   saveToStorage(noteText.innerText); //sending just the text to be saved (we can create the element easily on our own)
 
    //reset entry value
    document.querySelector('#addNoteText').value = "";
@@ -55,11 +53,15 @@ function addNote(e) {
 
 //removes clicked parent element from the DOM
 function removeNote (e) {
+   deleteFromStorage(e.target.textContent); //removing from local storage
+
    if (e.target.tagName == 'I') { //if we click on the icon
       e.target.parentNode.parentNode.remove();
    } else {
       e.target.parentNode.remove();
    }
+
+   
 }
 
 //marks or unmarks clicked parent element
@@ -98,66 +100,69 @@ function markNote (e) {
    }
 }
 
-//this allows you to edit the note by showing the edit form and minimizing the other form (only for initiating edit)
-function editNote (e) {
-   let textField, fullNote;
+//Learned a lot about to-do list and storage creation from this video: https://www.youtube.com/watch?v=Ttf3CEsEwMQ&t=3768s
+function saveToStorage(toDoText) {
+   let toDos;
 
-   if (e.target.tagName == 'I') { //fixing for the issue with icon referencing
-      textField = e.target.parentNode.parentNode.firstChild;
-      fullNote = e.target.parentNode.parentNode;
-
+   if (window.localStorage.getItem('toDos') === null) {
+      toDos = [];
    } else {
-      textField = e.target.parentNode.firstChild;
-      fullNote = e.target.parentNode;
+      toDos = JSON.parse(window.localStorage.getItem('toDos'));
    }
 
-   document.querySelector('#toDoList').style.display = 'none';
-   document.querySelector('#editToDo').style.display = 'flex';
-
-   document.querySelector('#editNoteText').value = textField.textContent; //getting text element value
-
-   //disabling relevant fields
-   fullNote.style.opacity = 0.5;
-   for (let i = 0; i < fullNote.childNodes.length; ++i) {
-      if (fullNote.childNodes[i].tagName == 'BUTTON') { //tagName returns the value in UPPERCASE
-         fullNote.childNodes[i].disabled = true;
-      }
-   }
-   
-   document.querySelector('#doneEditButton').addEventListener('click', submitEdit(textField, fullNote), 'false');
-   document.querySelector('#cancelEditButton').addEventListener('click', returnEdit(fullNote), 'false');
-   
-
+   toDos.push(toDoText); //adding element to toDos array and then saving the updated array to local storage
+   window.localStorage.setItem('toDos', JSON.stringify(toDos));
 }
 
-//this function cancels the edit imposed, by removing the edit form and going back to the original page
-function returnEdit(noteElement) { 
-   return function curriedResetNote(e) { //seems like this is being called when event exists
-      resetNote(noteElement);
+function loadFromStorage(e) {
+   let toDos;
+
+   if (window.localStorage.getItem('toDos') === null) {
+      toDos = [];
+   } else {
+      toDos = JSON.parse(window.localStorage.getItem('toDos'));
    }
-   
+
+   for (let i = 0; i < toDos.length; ++i) {
+      let fullNote = document.createElement('div');
+      let noteText = document.createElement('li');
+      let deleteButton = document.createElement('button');
+      let completeButton = document.createElement('button');
+
+      deleteButton.type = "button";
+      completeButton.type = "button"; //have to change the default value from 'submit' to a button
+
+      deleteButton.innerHTML = "<i class='fa-solid fa-square-minus'></i>";
+      completeButton.innerHTML = "<i class='fa-solid fa-check'></i>";
+      
+      noteText.innerText = toDos[i]; //getting text from local storage to load up on page
+
+      fullNote.appendChild(noteText); //the div is the parent of these 3 elements in the note
+      fullNote.appendChild(deleteButton);
+      fullNote.appendChild(completeButton);
+
+      document.querySelector('#noteList').appendChild(fullNote); //adding the new div with its contents to the list
+
+      fullNote.classList.add('toDo');
+      noteText.classList.add('noteText');
+      completeButton.classList.add('completeButton');
+      deleteButton.classList.add('deleteButton');
+
+      deleteButton.addEventListener('click', removeNote, false);
+      completeButton.addEventListener('click', markNote, false);
+
+      completeButton.value = false; // button is not yet clicked (false)
+   }
 }
 
+function deleteFromStorage(toDoText) {
+      let toDos;
 
-//this function changes the value of the li element to reflect what is in the editToDo form
-https://stackoverflow.com/questions/256754/how-to-pass-arguments-to-addeventlistener-listener-function?noredirect=1&lq=1
-function submitEdit(textField, noteElement) {
-   return function changeNote(e) { //curried function to be able to pass parameter (see link above)
-      textField.textContent = document.querySelector('#editNoteText').value;
+      toDos = JSON.parse(window.localStorage.getItem('toDos')); //this delete button is called when we have toDos, so I'm not going to check for NULL
 
-      resetNote(noteElement); //returning back to regular screen
-   }
+      toDoIndex = toDos.indexOf(toDoText);
+      toDos.splice(toDoIndex, 1); //removing array from index
+
+      window.localStorage.setItem('toDos', JSON.stringify(toDos));
 }
 
-function resetNote(noteElement) {
-   document.querySelector('#toDoList').style.display = 'flex';
-   document.querySelector('#editToDo').style.display = 'none';
-
-   noteElement.style.opacity = 1.0;
-
-   for (let i = 0; i < noteElement.childNodes.length; ++i) {
-      if (noteElement.childNodes[i].tagName == 'BUTTON') { //tagName returns the value in UPPERCASE
-         noteElement.childNodes[i].disabled = false;
-      }
-   }
-}
