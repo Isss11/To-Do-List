@@ -2,7 +2,7 @@
 This to-do list was created to help me learn more about regular JavaScript, as well as further my knowledge in HTML/CSS. It has functionality to store to-do notes in the local storage of the user's web browser, as well as the ability to delete and cross-off the notes.
 
 **Languages Used:** JavaScript, HTML/CSS
-**Other Technologies Used:** JSON, LocalStorage![Screenshot (2667)](https://user-images.githubusercontent.com/89956249/187103922-06e622ef-9bed-416a-8264-3fab3130f313.png)
+**Other Technologies Used:** JSON, LocalStorage
 
 
 ![Screenshot (2666)](https://user-images.githubusercontent.com/89956249/187103955-72387930-1ac3-4e03-b82b-da840cc362b9.png)
